@@ -236,8 +236,6 @@ If you're interested in compilers, and interpreters, generally you might enjoy t
   * An interpreter for a FORTH-like language.
 * https://github.com/skx/critical
   * An interpreter for a TCL-like language.
-* https://github.com/skx/bfcc
-  * A [brainfuck](https://en.wikipedia.org/wiki/Brainfuck) compiler
 * https://github.com/skx/math-compiler
   * A simple compiler for mathematical expressions.
 
