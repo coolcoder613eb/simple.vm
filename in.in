@@ -1,0 +1,6 @@
+:start
+in_str #1
+store #2, "\n"
+concat #3, #1, #2
+print_str #3
+goto start

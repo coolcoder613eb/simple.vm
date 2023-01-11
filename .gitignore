@@ -1,5 +1,4 @@
 *.o
-*.raw
-simple-vm
 embedded
 TODOsimple.vm
+.vs/

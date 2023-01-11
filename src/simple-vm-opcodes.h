@@ -72,6 +72,7 @@ enum opcode_values {
     STRING_CONCAT,
     STRING_SYSTEM,
     STRING_TOINT,
+	STRING_IN,
 
     /**
      * Comparison/Test operations.

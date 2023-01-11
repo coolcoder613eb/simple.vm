@@ -11,5 +11,5 @@
 #
 #
 
-        store #1, "/bin/ls"
+        store #1, "cmd"
         system #1

@@ -636,6 +636,31 @@ void op_string_toint(struct svm *svm)
 }
 
 
+void op_string_in(struct svm *svm)
+{
+    /* get the destination register */
+    unsigned int reg = next_byte(svm);
+    BOUNDS_TEST_REGISTER(reg);
+
+    if (getenv("DEBUG") != NULL)
+        printf("STRING_IN(Register:%d)\n", reg);
+
+    /* get the string and convert to integer */
+    char *str = malloc(1024);
+    scanf("%[^\n]%*c", str);
+
+    /* free the old version */
+    free(svm->registers[reg].content.string);
+
+    /* set the int. */
+    svm->registers[reg].type = STRING;
+    svm->registers[reg].content.string = str;
+
+    /* handle the next instruction */
+    svm->ip += 1;
+}
+
+
 /**
  * Unconditional jump
  */
@@ -1238,6 +1263,7 @@ void opcode_init(svm_t * svm)
     svm->opcodes[STRING_CONCAT] = op_string_concat;
     svm->opcodes[STRING_SYSTEM] = op_string_system;
     svm->opcodes[STRING_TOINT] = op_string_toint;
+	svm->opcodes[STRING_IN] = op_string_in;
 
     /* comparisons/tests */
     svm->opcodes[CMP_REG] = op_cmp_reg;

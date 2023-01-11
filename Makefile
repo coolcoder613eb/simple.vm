@@ -9,17 +9,21 @@
 CC=gcc
 LINKER=$(CC) -o
 CFLAGS+=-O2 -W -Wall -Wextra -pedantic -std=gnu99
+# -shared
 
 
 
 #
 #  The default targets
 #
-all: simple-vm embedded
+all: simple-vm simple-vm-dll embedded
 
 #
 #  The sample driver.
 #
+simple-vm-dll: src/main.o src/simple-vm.o src/simple-vm-opcodes.o
+	$(LINKER) $@ $(OBJECTS) $(CFLAGS) -shared src/main.o src/simple-vm.o src/simple-vm-opcodes.o -o simple-vm.dll
+
 simple-vm: src/main.o src/simple-vm.o src/simple-vm-opcodes.o
 	$(LINKER) $@ $(OBJECTS) $(CFLAGS) src/main.o src/simple-vm.o src/simple-vm-opcodes.o
 

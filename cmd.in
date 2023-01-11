@@ -1,0 +1,11 @@
+; prompt
+store #9, "<NUL set /p=%cd%^>"
+; run
+store #8, "cmd /C "
+store #8, ""
+:main
+system #9
+in_str #1
+concat #2, #8, #1
+system #2
+goto main
