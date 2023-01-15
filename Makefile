@@ -24,6 +24,9 @@ all: simple-vm simple-vm-dll embedded
 simple-vm-dll: src/main.o src/simple-vm.o src/simple-vm-opcodes.o
 	$(LINKER) $@ $(OBJECTS) $(CFLAGS) -shared src/main.o src/simple-vm.o src/simple-vm-opcodes.o -o simple-vm.dll
 
+#simple-vm-so: 
+#	gcc -fPIC -shared src/main.c src/simple-vm.c src/simple-vm-opcodes.c -o libsimple-vm.so.6
+
 simple-vm: src/main.o src/simple-vm.o src/simple-vm-opcodes.o
 	$(LINKER) $@ $(OBJECTS) $(CFLAGS) src/main.o src/simple-vm.o src/simple-vm-opcodes.o
 

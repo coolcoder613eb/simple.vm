@@ -1,0 +1,9 @@
+goto start
+; pointer is one byte in RAM wich is memory loc
+; pointed is one byte which is the type
+; then data, one byte if int, until a end_str byte (0xFF)
+:point_str
+poke 
+ret
+:start
+store #0, "Hello, World!"
