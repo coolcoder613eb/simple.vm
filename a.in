@@ -1,15 +1,12 @@
-; lorem ipsum sit dolor amet 
-
+ store #8, "blabla\n"
+ store #10, #8
+ print_str #8
 :what
-in_str #9
-string2int #9
-store #4, #9
-store #9, #4
-int2string #9
-store #2 "\n"
-concat #3, #9, #2
-store #9, #3
-print_str #9
-; PRINT Hello, World! 
-
-goto what
+ in_str #9
+ store #10, #9
+ store #9, #10
+ store #2, "\n"
+ concat #3, #9, #2
+ store #9, #3
+ print_str #9
+ goto what

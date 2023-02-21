@@ -1,3 +1,6 @@
+store #0, 0x00FF
+
+poke #0, #1
 goto start
 ; pointer is one byte in RAM wich is memory loc
 ; pointed is one byte which is the type
@@ -7,3 +10,4 @@ poke
 ret
 :start
 store #0, "Hello, World!"
+call point_str

@@ -26,7 +26,7 @@
 /**
  * Count of registers.
  */
-#define REGISTER_COUNT 10
+#define REGISTER_COUNT 256 /////////10
 
 
 #ifndef _Bool

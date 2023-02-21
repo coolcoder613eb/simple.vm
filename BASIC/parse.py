@@ -12,7 +12,8 @@ class Parser:
         self.labelsGotoed = set() # All labels goto'ed, so we know if they exist or not.
         self._l = 0
 
-        self.thevars = {'A':'#4','B':'#5','C':'#6','D':'#7','E':'#8'}
+        self.varreg = 10
+        self.thevars = {}
 
         self.curToken = None
         self.peekToken = None
@@ -98,9 +99,9 @@ class Parser:
                 self.nextToken()
             elif self.checkToken(TokenType.IDENT):
                 try:
-                    self.emitter.emitLine('store #9, '+self.thevars[self.curToken.text])
-                    self.emitter.emitLine('int2string #9')
-                    self.emitter.emitLine('store #2 "\\n"')
+                    self.emitter.emitLine(f'store #9, #{self.thevars[self.curToken.text]}')
+                    #self.emitter.emitLine('int2string #9')
+                    self.emitter.emitLine('store #2, "\\n"')
                     self.emitter.emitLine('concat #3, #9, #2')
                     self.emitter.emitLine('store #9, #3')
                     self.emitter.emitLine('print_str #9')
@@ -172,14 +173,18 @@ class Parser:
             #  Check if ident exists in symbol table. If not, declare it.
             if self.curToken.text not in self.symbols:
                 self.symbols.add(self.curToken.text)
-                self.emitter.headerLine("float " + self.curToken.text + ";")
+                self.thevars.update({self.curToken.text: self.varreg})
 
-            self.emitter.emit(self.curToken.text + " = ")
+                #self.emitter.headerLine("float " + self.curToken.text + ";")
+
+
             self.match(TokenType.IDENT)
             self.match(TokenType.EQ)
 
             self.expression()
-            self.emitter.emitLine(";")
+            self.emitter.emitLine(f"store #{self.varreg}, #8")
+            self.varreg += 1
+            #self.emitter.emitLine(";")
 
         # "INPUT" ident
         elif self.checkToken(TokenType.INPUT):
@@ -193,9 +198,9 @@ class Parser:
             ########
 
             self.emitter.emitLine('in_str #9')
-            self.emitter.emitLine('string2int #9')
+            #self.emitter.emitLine('string2int #9')
             try:
-                self.emitter.emitLine('store '+self.thevars[self.curToken.text]+', #9')
+                self.emitter.emitLine(f'store #{self.thevars[self.curToken.text]}, #9')
             except:
                 raise KeyError(f'{self.curToken.text} is not in {self.thevars.keys()}!')
             # Emit scanf but also validate the input. If invalid, set the variable to 0 and clear the input.
@@ -239,10 +244,12 @@ class Parser:
 
     # expression ::= term {( "-" | "+" ) term}
     def expression(self):
+        # reg 8
         self.term()
         # Can have 0 or more +/- and expressions.
         while self.checkToken(TokenType.PLUS) or self.checkToken(TokenType.MINUS):
-            self.emitter.emit(self.curToken.text)
+            #self.emitter.emit(self.curToken.text)
+            print(self.curToken.text)
             self.nextToken()
             self.term()
 
@@ -252,7 +259,8 @@ class Parser:
         self.unary()
         # Can have 0 or more *// and expressions.
         while self.checkToken(TokenType.ASTERISK) or self.checkToken(TokenType.SLASH):
-            self.emitter.emit(self.curToken.text)
+            #self.emitter.emit(self.curToken.text)
+            print(self.curToken.text)
             self.nextToken()
             self.unary()
 
@@ -261,21 +269,25 @@ class Parser:
     def unary(self):
         # Optional unary +/-
         if self.checkToken(TokenType.PLUS) or self.checkToken(TokenType.MINUS):
-            self.emitter.emit(self.curToken.text)
+            #self.emitter.emit(self.curToken.text)
+            print(self.curToken.text)
             self.nextToken()
         self.primary()
 
     # primary ::= number | ident
     def primary(self):
         if self.checkToken(TokenType.NUMBER):
-            self.emitter.emit(self.curToken.text)
+            self.emitter.emitLine(f'store #8, {self.curToken.text}')
+            self.nextToken()
+        if self.checkToken(TokenType.STRING):
+            self.emitter.emitLine(f'store #8, \"{self.curToken.text}\\n\"')
             self.nextToken()
         elif self.checkToken(TokenType.IDENT):
             # Ensure the variable already exists.
             if self.curToken.text not in self.symbols:
                 self.abort("Referencing variable before assignment: " + self.curToken.text)
 
-            self.emitter.emit(self.curToken.text)
+            self.emitter.emitLine(f'store #8, #{self.thevars[self.curToken.text]}')
             self.nextToken()
         else:
             # Error!

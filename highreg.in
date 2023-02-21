@@ -1,0 +1,2 @@
+ store #255, "Hello, World!"
+print_str #255
