@@ -1,0 +1,43 @@
+jmp _start
+# exit
+
+:add
+    # for call/ret
+    pop #9
+
+    # arguments `def add(a,b):`
+    #                    ^ ^
+    pop #1
+    pop #2
+
+
+    # body and return `return a + b`
+    add #0, #1, #2
+
+
+    # for call/ret
+    push #9
+    ret
+
+
+:_start
+    # print(str(add(1,3)))
+    #           ^^^^^^^^
+        # arg 2: 1
+        store #0, 32
+        push #0
+        # arg 1: 3
+        store #0, 97
+        push #0
+        call add
+    # return value is in #0
+    # 
+    # print(str(add(1,3)))
+    #       ^^^^        ^
+    int2string #0
+    int2string #0
+    
+    print_str #0
+    # print(str(add(1,3)))
+    # ^^^^^^             ^
+
