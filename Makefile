@@ -25,6 +25,13 @@ simple-vm: src/main.o src/simple-vm.o src/simple-vm-opcodes.o
 
 
 #
+#  Shared library
+#
+
+shared: src/simple-vm.o src/simple-vm-opcodes.o
+	$(LINKER) libsimple-vm.dylib -shared $(OBJECTS) $(CFLAGS) src/main.o src/simple-vm.o src/simple-vm-opcodes.o
+
+#
 #  A program that contains an embedded virtual machine and allows
 # that machine to call into the application via a custom opcode 0xCD.
 #
