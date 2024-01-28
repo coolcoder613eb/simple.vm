@@ -19,9 +19,10 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .header("simple-vm.h")
+        .header("simple-vm-opcodes.h")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         // Finish the builder and generate the bindings.
         .generate()
         // Unwrap the Result and panic on failure.

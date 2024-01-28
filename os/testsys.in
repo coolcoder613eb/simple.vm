@@ -1,0 +1,8 @@
+# store 2
+    store #1, 0x02
+# print it
+    print_int #1
+# double it
+    syscall 0x02
+# show the result
+    print_int #1

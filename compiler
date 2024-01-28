@@ -88,6 +88,7 @@ use constant IS_INTEGER    => 0x44;
 #
 use constant NOP_OP    => 0x50;
 use constant REG_STORE => 0x51;
+use constant SYSCALL   => 0x52;
 
 
 #
@@ -375,6 +376,17 @@ while ( my $file = shift )
                          label  => $dest
                       } );
             }
+        }
+        elsif ( $line =~ /^\s*syscall\s+([^\s]+)\s*/ )
+        {
+
+            # syscall
+            my $dest = $1;
+            $dest = hex($dest) if ( $dest =~ /0x/i );
+
+            print $out chr SYSCALL;
+            print $out chr $dest;
+            $offset += 2;
         }
         elsif ( $line =~
             /^\s*(add|and|sub|mul|div|or|xor|concat)\s+#([0-9]+)\s*,\s*#([0-9]+)\s*,\s*#([0-9]+)/
